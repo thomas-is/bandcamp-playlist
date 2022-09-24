@@ -1,0 +1,3 @@
+# send some files as octet-stream
+# to force a download on client side
+AddType application/octet-stream .mp3

@@ -1,0 +1,31 @@
+
+#page {
+    margin: 0px auto;
+    max-width: 1024px;
+}
+
+#top {
+    margin-top: 12px;
+}
+
+.process {
+    display:flex;
+    flex-direction: row; 
+    border-bottom: 1px solid #000;
+}
+.process > * {
+    padding-left: 8px;
+}
+.action {
+    flex: 0 0 64px;
+}
+.state {
+    flex: 1 1;
+}
+.title {
+    flex: 8 8;
+}
+
+#components {
+    display: none;
+}

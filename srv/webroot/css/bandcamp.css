@@ -1,0 +1,159 @@
+@import url('https://fonts.googleapis.com/css?family=Audiowide|Material+Icons');
+
+* {
+    box-sizing:border-box;
+}
+
+h1 {
+    margin: 6px auto;
+}
+form {
+    display: block;
+    margin: 2px auto 12px auto;
+    max-width: 290px;
+    text-align: center;
+}
+input[type=text], button {
+    min-width: 300px;
+    font-size: 10px;    
+}
+
+pre {
+    text-align: left;
+}
+
+#page {
+    max-width: 720px;
+    margin: 0px auto;
+    padding: 0px;
+    text-align: center;
+    font-family: "Audiowide";
+    font-size: 12px;
+}
+
+#bandcamp {
+    display: grid;
+    grid-template-columns: auto;
+    grid-template-rows: auto;
+    grid-gap: 4px;
+    align-content: space-between;
+    border: 2px solid #ddd;
+    padding: 12px;
+}
+
+#bandcamp > * {
+
+}
+
+#artist     {
+    grid-column: 2 / 6;
+    grid-row: 2;
+    font-size: 18px;
+}
+#album      {
+    grid-column: 2 / 6;
+    grid-row: 3;
+    font-size: 16px;
+}
+#released   {
+    grid-column: 2 / 6;
+    grid-row: 4;
+    font-size: 12px;
+}
+
+#url   {
+    grid-column: 1 / 6;
+    grid-row: 7;
+    font-size: 10px;
+}
+
+#cover {
+    grid-column: 1;
+    grid-row: 2 /span 4;
+    width: 300px;
+    height: 300px;
+    border: 1px solid #ddd;
+    border-radius: 12px;
+    box-shadow: 0px 0px 6px;
+    margin: auto;
+}
+
+#tracks {
+    grid-column: 2 / 6;
+    grid-row: 5;
+    width: 380px;
+    min-height: 300px;
+    margin: 0px auto;
+}
+#tracks > span:nth-child(even) {
+    background: #eee;
+}
+#tracks > span {
+    cursor: pointer;
+    display: block;
+    margin: 2px auto;
+    padding: 4px 12px;
+    text-align: left;
+    border-radius: 12px;
+}
+#tracks > span:nth-child(even) {
+    background: #ddd;
+}
+#tracks > span:nth-child(odd) {
+    background: #eee;
+}
+#tracks > span[data-playing] {
+    color: #44f;
+}
+
+#tracks > span[data-playing]::after {
+    color: #44f;
+    content : "<";
+}
+
+#player {
+    grid-column: 1 / 6;
+    grid-row: 6;
+    width: 100%;
+}
+
+
+[data-src=""] {
+    text-decoration: line-through;
+}
+
+
+#page {
+    margin: 0px auto;
+    max-width: 1024px;
+}
+
+#top {
+    margin-top: 12px;
+    font-family: monospace;
+    text-align: left;
+}
+
+.process {
+    display:flex;
+    flex-direction: row; 
+    border-bottom: 1px solid #000;
+}
+.process:nth-child(even) {
+    background-color: #eee;
+}
+
+.process > * {
+    padding-left: 8px;
+}
+.state {
+    flex: 1 1;
+    cursor: pointer;
+}
+.title {
+    flex: 8 8;
+}
+
+#components {
+    display: none;
+}

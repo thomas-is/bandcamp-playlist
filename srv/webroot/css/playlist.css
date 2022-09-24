@@ -1,0 +1,349 @@
+@import url('https://fonts.googleapis.com/css?family=Audiowide|Material+Icons');
+
+* {
+    font-family: "Audiowide", monospace;
+    box-sizing: border-box;
+    --fg:#ddd;
+    --halo:#fff;
+    --bg: #000;
+    --bg-hi: #333;
+    --border: #555;
+    --shadow : #777;
+}
+
+
+@keyframes blinker {
+  50% {
+    opacity: 0;
+  }
+}
+
+.blink {
+    animation: blinker 1s linear infinite;
+}
+
+
+button:focus {
+    outline:0;
+}
+
+.faded {
+    opacity: 0.2;
+}
+
+body {
+    margin: 0px;
+    color: var(--fg);
+    background-color: var(--bg);
+    text-shadow: 0px 0px 1px var(--shadow);
+}
+
+#page {
+    postion: relative;
+    display: flex;
+    flex-direction: column;
+    max-width: 1024px;
+    margin: 0px auto;
+    padding: 0px 2px;
+}
+
+#player {
+    display:block;
+    width: 100%;
+    max-width: 95%;
+    margin: 2px auto;
+}
+
+.flexplayer {
+    flex: 1 1;
+    margin: 2px auto;
+    max-width: 480px;
+}
+.flexplayer{
+    margin-bottom: 52px;
+}
+.flexplaylist {
+    display: flex;
+    flex-wrap: wrap;
+    margin-left: 4px;
+    margin-right: 4px;
+    margin-bottom: 60px;
+    flex: 2 2;
+    margin-top: 2px;
+    width: 100%;
+}
+.flexplaylist:before{
+    display: block;
+    margin-bottom: 12px;
+    width: 100%;
+    text-align: center;
+    content:"Playlist";
+    font-size: 42px;
+    text-shadow: 0px 0px 4px var(--fg-hi);
+}
+
+#gotop {
+    visibility: hidden;
+    position: fixed;
+    z-index: 99;
+    cursor: pointer;
+
+    width: 128px;
+    bottom: 0px;
+    margin-left: 2px;
+
+    line-height: 42px;
+    font-size: 32px;
+    padding: 4px 0px 0px 0px;
+
+    text-align: center;
+    text-shadow: 0px 0px 6px var(--halo);
+    background: radial-gradient(var(--bg),var(--bg-hi));
+    box-shadow: 0px 0px 6px var(--shadow) inset;
+    border-radius: 32px;
+
+    opacity: 0.8;
+}
+#gotop::after{
+    content:"vertical_align_top";
+    font-family: "Material Icons";
+}
+
+
+#cover {
+    position:relative;
+    display: block;
+    text-align: center;
+}
+
+#cover > img {
+    cursor: pointer;
+    margin-top: 4px;
+    max-width: 95%;
+    min-height: 200px;
+    box-shadow: 0px 0px 6px var(--shadow);
+    border-radius: 12px;
+    transition: opacity 0.8s;
+}
+
+#status {
+    position: absolute;
+    margin-top: 4px;
+    margin-left: 4px;
+    font-family: "Material Icons";
+    font-size: 24px;
+    line-height: 24px;
+    z-index: 40;
+    border-radius: 24px;
+    color: var(--fg);
+    text-shadow: 0px 0px 8px var(--halo);
+}
+
+#nav {
+    display: flex;
+    flex-direction: row;
+    align-content:space-between;
+    margin: 0px 6px;
+}
+
+#nav > * {
+    cursor: pointer;
+    color: inherit;
+    margin: 2px;
+    font-family: "Material Icons";
+    font-size: 32px;
+    line-height: 42px;
+    height: 42px;
+    text-decoration: none;
+    text-align: center;
+    text-shadow: 0px 0px 6px var(--halo);
+    background: radial-gradient(var(--bg),var(--bg-hi));
+    box-shadow: 0px 0px 6px var(--shadow) inset;
+    border: none;
+    border-radius: 32px;
+}
+#prev,#next{
+    flex: 1 1 50%;
+}
+#prev::before {
+    content: "skip_previous";
+}
+#next:before {
+    content: "skip_next";
+}
+
+#download{
+    flex: 0 0 42px;
+    font-size: 26px;
+}
+
+#download::after {
+    content:"file_download";
+}
+#download[href=""]{
+    visibility: hidden;
+}
+
+.lime {
+    --fg: #afa;
+    --halo: #4f4;
+    --bg: #353;
+}
+
+.green {
+    --fg: #4f4;
+    --halo: #0f0;
+    --bg: #151;
+}
+
+.red {
+    --fg: #d00;
+    --halo: #e00;
+    --bg: #300;
+}
+
+.orange {
+    --fg: #fc0;
+    --halo: #fa3;
+    --bg: #420;
+}
+
+.yellow {
+    --fg: #fe4;
+    --halo: #fe0;
+    --bg: #330;
+}
+
+
+
+[data-mp3] {
+    cursor: pointer;
+    display: flex;
+    flex-direction:row;
+    flex-wrap:nowrap;
+    font-size: 13px;
+    margin: 0px;
+    border-radius: 8px;
+    padding: 3px;
+    text-shadow: 0px 0px 1px var(--fg);
+}
+
+[data-mp3] > .track {
+    flex: 0 0 32px;
+    text-align: center;
+}
+[data-mp3] > .title { flex: 1 1; }
+
+
+[data-album] > [data-mp3]:nth-child(even) {
+    background-color: #111;
+}
+
+[data-album] > [data-mp3]:nth-child(odd) {
+    background-color: #222;
+}
+
+[data-artist] {
+    background: radial-gradient(#111,var(--bg));
+    border: 1px solid #222;
+    border-radius: 8px;
+    padding: 6px;
+    margin: 0px 4px 4px 0px;
+    flex: 1 1 260px;
+    max-width: 320px;
+}
+.albumhead {
+    display: flex;
+    padding: 4px;
+    margin-bottom: 4px;
+}
+.smallcover {
+    flex: 0 0 128px;
+    height: 128px;
+    box-shadow: 0px 0px 2px var(--shadow);
+    border-radius: 3px;
+}
+.nfo {
+    flex: 1 1;
+    display: block;
+}
+
+.artist,.album,.released {
+    display: block;
+    text-shadow: 0px 0px 2px var(--fg);
+    margin-left:8px;
+    padding: 0px;
+}
+
+.artist {
+    font-size: 16px;
+    margin-bottom: 4px;
+}
+
+.album {
+    font-size: 14px;
+    margin-bottom: 2px;
+}
+.released {
+    font-size: 10px;
+}
+.released::before {
+    content: "(";
+}
+.released::after {
+    content: ")";
+}
+
+
+
+.current {
+    color: var(--fg);
+    text-shadow: 0px 0px 2px var(--halo);
+    box-shadow: 0px 0px 6px var(--halo) inset;
+}
+
+
+
+
+#nowplaying {
+    cursor: pointer;
+    display: flex;
+    flex-direction: column;
+    font-size: 13px;
+    margin: 2px 8px;
+    padding: 6px;
+    background: radial-gradient(var(--bg),var(--bg-hi));
+    box-shadow: 0px 0px 10px var(--shadow) inset;
+    border: 1px solid var(--border);
+    border-radius: 32px;
+}
+
+#nowplaying::before {
+    content: "gps_fixed";
+    font-family: "Material Icons";
+    text-align: right;
+    font-size: 24px;
+    margin: 8px 6px -28px 0px;
+    opacity: 0.5;
+}
+
+#nowplaying>.artist,#nowplaying>.song {
+    flex: 1 1 50%;
+    text-align: center;
+    text-shadow: 0px 0px 2px var(--halo);
+    margin: 0px;
+    font-size: 12px;
+    line-height: 16px;
+}
+
+
+.flex {
+    display: flex;
+    flex-direction: row;
+    margin: 4px auto 8px auto;
+}
+
+[data-mp3=""] {
+    color: #555;
+    text-shadow: 0px 0px 2px #000;
+}
