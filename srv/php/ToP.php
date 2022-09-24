@@ -2,34 +2,63 @@
 
 class ToP {
 
-    private $proc = array();
+  private $proc = array();
 
-    const DS   = DIRECTORY_SEPARATOR;
-    const PROC = Config::ROOT.self::DS.Config::PROC;
+  const DS   = DIRECTORY_SEPARATOR;
+  const PROC = Config::ROOT.self::DS.Config::PROC;
 
-    public function __construct() {
-        $pdirs = array();
-        foreach(scandir(self::PROC) as $dir) 
-            if( is_numeric($dir) ) $pdirs[] = $dir;
-        if( empty($pdirs) ) return;
-        foreach($pdirs as $id) 
-            $this->proc[(int) $id] = new Process( (int) $id );
-    }
-    public function start($id)  { return @$this->proc[(int)$id]->start();  } 
-    public function cancel($id) { return @$this->proc[(int)$id]->cancel(); }
-    public function kill($id)   { return @$this->proc[(int)$id]->kill(); }
-    public function state() {
-        $top = array();
-        if( empty($this->proc) ) return $top;
-        foreach($this->proc as $proc)
-            $top[$proc->id()] = array("state"=>$proc->state(), "title"=>$proc->get_title() );
-        return $top;
-    }
-    public function clean() {
-        if( empty($this->proc) ) return;
-        foreach($this->proc as $proc) $proc->clean();
+  public function __construct() {
+
+    if( empty(shell_exec("which nohup")) ) {
+      throw new \Exception(__CLASS__." can't find nohup!");
     }
 
-}    
+    $pdirs = [];
+
+    foreach(scandir(self::PROC) as $dir) {
+      if( is_numeric($dir) ) { $pdirs[] = $dir; }
+    }
+
+    foreach($pdirs as $id) {
+      $this->proc[ (int) $id ] = new Process( (int) $id );
+    }
+
+  }
+
+  private function safeAction( string $action, int $id ) {
+    if( empty($this->proc[$id]) ) {
+      return null;
+    }
+    return $this->proc[$id]->$action();
+  }
+
+  public function start ( int $id ) { return $this->safeAction("start" , $id); }
+  public function cancel( int $id ) { return $this->safeAction("cancel", $id); }
+  public function kill  ( int $id ) { return $this->safeAction("kill"  , $id); }
+
+  public function state() {
+
+    $top = [];
+
+    foreach($this->proc as $proc) {
+      $top[$proc->id()] = [
+        "state" =>  $proc->state(),
+        "title" =>  $proc->get_title()
+      ];
+    }
+
+    return $top;
+  }
+
+
+  public function clean() {
+
+    foreach($this->proc as $proc) {
+      $proc->clean();
+    }
+
+  }
+
+}
 
 ?>
