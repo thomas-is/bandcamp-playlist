@@ -1,4 +1,4 @@
 srv/webroot/playlist/*
 !srv/webroot/playlist/.keepme
-srv/webroot/proc/*
-!srv/webroot/proc/.keepme
+srv/proc/*
+!srv/proc/.keepme
