@@ -120,6 +120,30 @@ class Bandcamp {
     }
   }
 
+    /*
+    *   NFO json export
+    */
+    public function nfo() {
+        $js = array();
+        $js['url']          = $this->url;
+        $js['artist']       = $this->artist;
+        $js['released']     = $this->released;
+        $js['album']        = $this->album;
+        $js['cover']        = $this->filePrefix().DIRECTORY_SEPARATOR."cover.jpg";
+        $js['tracks']       = array();
+        foreach( $this->tracks as $track ) {
+            $jstrack = array();
+            $jstrack['num'     ] = $track->num;
+            $jstrack['title'   ] = $track->title;
+            $jstrack['duration'] = $track->duration;
+            if( !empty($track->mp3url()) ) {
+                $jstrack['mp3' ] = $this->filePrefix() . $track->fileSuffix();
+            }
+            $js['tracks'][] = $jstrack;
+        }
+        return json_encode($js);
+    }
+
 
 
 }
