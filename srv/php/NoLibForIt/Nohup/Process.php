@@ -1,5 +1,7 @@
 <?php
 
+namespace NoLibForIt\Nohup;
+
 /**
   *   @abstract
   *       Handle process in the background
@@ -25,6 +27,14 @@ class Process {
   const STATE_DONE    = "DONE"       ;
   const STATE_ERROR   = "ERROR"      ;
 
+  const SYS_REQUIRED = [
+    'grep',
+    'kill',
+    'nohup',
+    'ps',
+    'sed',
+  ];
+
   private int $_id = 0;
 
   /**
@@ -39,8 +49,10 @@ class Process {
     */
   public function __construct( string|int $arg , string $label = "" ) {
 
-    if( empty(shell_exec("which nohup")) ) {
-      $this-panic("can't find nohup!");
+    foreach( self::SYS_REQUIRED as $bin ) {
+      if( empty(shell_exec("which $bin")) ) {
+        $this-panic("can't find $bin");
+      }
     }
 
     if ( is_int($arg) ) {
@@ -77,26 +89,37 @@ class Process {
 
   /**
     *   @param  string  $property
-    *   @return string
+    *   @return string|int|null
     */
   private function get( string $property ) {
-    return (string) file_get_contents( $this->storage() . self::DS . $property );
+    if( ! file_exists( $this->storage() . self::DS . $property ) ) {
+      return null;
+    }
+    $value = file_get_contents( $this->storage() . self::DS . $property );
+    if ( is_numeric($value) ) {
+      return (int) $value;
+    }
+    return empty($value) ? null : $value;
   }
 
+  public function id()       { return $this->_id;             }
+  public function command()  { return $this->get("command");  }
+  public function label()    { return $this->get("label");    }
+  public function signal()   { return $this->get("signal");   }
+  public function exitcode() { return $this->get("exitcode"); }
+  public function pid()      {
+    $pid = $this->get("pid");
+    $out = trim(shell_exec("ps -o pid,stat | sed 's/^ *//g' | grep '^$pid '"));
+    return empty($out) ? null : $pid;
+  }
   /**
-    * @param  string    $value
-    * @return int|null
+    * @return bool
     */
-  private function asInt( string $value ) {
-    return strlen($value) == 0 ? null : (int) $value;
+  public function isRunning() {
+    return ! empty($this->pid());
   }
 
-  public function id()       { return $this->_id;                           }
-  public function command()  { return $this->get("command");                }
-  public function label()    { return $this->get("label");                  }
-  public function signal()   { return $this->get("signal");                 }
-  public function exitcode() { return $this->asInt($this->get("exitcode")); }
-  public function pid()      { return $this->asInt($this->get("pid"));      }
+
 
   /**
     *   @param  string $property, string|int $value
@@ -105,48 +128,33 @@ class Process {
   private function set( string $property, string|int $value) {
     return (int) file_put_contents(
       $this->storage() . self::DS . $property,
-      (string) $value . PHP_EOL
+      (string) $value
     );
   }
 
 
   /**
     *   @return string $state
-    *   as given by ps
-    *   State will be "S" most of the time as the process
-    *   is running in the background (@see man ps)
     */
   public function state() {
 
+    /* has a valid exit code ? */
     if( is_int($this->exitcode()) ) {
-      /* valid exit code */
       return $this->exitcode() == 0  ? "DONE" : "ERROR";
     }
 
-    if( ! is_int($this->pid()) ) {
-      /* no PID */
-      return "QUEUED";
+    /* has a valid signal ? */
+    if( $this->signal() ) {
+      return $this->signal();
     }
 
-    /* defined PID */
-    exec( "ps -p {$this->pid()} -o state", $op );
-
-    if( isset($op[1]) ) {
-      /* valid PID */
+    /* has a valid pid ? */
+    if( is_int($this->pid()) ) {
       return "RUNNING";
     }
 
-    /* invalid PID */
-    return $this->signal();
+    return "QUEUED";
 
-  }
-
-  /**
-    * @return bool
-    */
-  public function isRunning() {
-    exec("ps -p {$this->pid()} -o state",$op);
-    return isset($op[1]);
   }
 
   /**
@@ -177,14 +185,12 @@ class Process {
     if( $this->exitcode() ) {
       return false;
     }
-
     /* is process already running ? */
     if( $this->pid() ) {
       return false;
     }
-
     /* does process have a command ? */
-    if( ! $this->get("command") ) {
+    if( empty($this->command()) ) {
       return false;
     }
 
@@ -193,16 +199,15 @@ class Process {
     $exitcode = $this->storage() . self::DS . "exitcode";
 
     /* $! to get the pid , $? to get exit code later on */
-    exec("nohup sh -c '$command\necho $? > $exitcode' > $stdout 2> $stderr & echo $!", $op);
+    $pid = (int) trim(shell_exec("nohup sh -c '{$this->command()}; echo $? > $exitcode' > $stdout 2> $stderr & echo $!"));
 
     /* did exec fail ? (no pid) */
-    if( ! isset($op[0]) ) {
+    if( empty($pid) ) {
       return false;
     }
+    $this->set( "pid", $pid );
 
-    $this->set( "pid", (string) $op[0] );
-
-    return (int) $op[0];
+    return $this->pid();
 
   }
 
@@ -214,10 +219,11 @@ class Process {
    */
   private function sendsig( string $signal ) {
 
-    if( ! $this->is_running() ) { return false; }
+    if( empty($this->pid()) ) { return false; }
 
     exec( "kill -$signal " . $this->pid() );
     $this->set( "signal", $signal );
+
     return true;
 
   }

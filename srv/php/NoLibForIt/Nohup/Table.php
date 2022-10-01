@@ -13,16 +13,11 @@ class Table {
     "state"    ,
   ];
 
-  private $job = array();
+  private array $job = [];
 
-  public function __construct() {
-    foreach(scandir( Env::baseDir() ) as $dir) {
-      if( is_numeric($dir) ) {
-        $this->job[ (int) $dir ] = new Process( (int) $dir );
-      }
-    }
+  public function ps() {
+    return shell_exec("ps");
   }
-
   /**  @return bool */
   private function action( string $action, int $id ) {
     return empty($this->job[$id]) ? false : (bool) $this->job[$id]->$action();
@@ -32,8 +27,23 @@ class Table {
   public function cancel( int $id ) { return $this->action("cancel", $id); }
   public function kill  ( int $id ) { return $this->action("kill"  , $id); }
 
+
+  private function init() {
+
+    $this->job = [];
+    foreach(scandir( Env::baseDir() ) as $dir) {
+      if( is_numeric($dir) ) {
+        $this->job[ (int) $dir ] = new Process( (int) $dir );
+      }
+    }
+
+  }
+
+
   /** @return array */
   public function get() {
+    $this->init();
+
     $top = [];
     foreach( $this->job as $job ) {
       $top[$job->id()] = [];
@@ -46,6 +56,7 @@ class Table {
 
   /** @return void */
   public function clean() {
+    $this->init();
     foreach( $this->job as $job ) {
       $job->clean();
     }
