@@ -19,16 +19,13 @@
 class Process {
 
   const DS   = DIRECTORY_SEPARATOR;
-  /* absolute path to proc/                   */
-  const PROC = Config::ROOT.self::DS.Config::PROC;
-
 
   const STATE_QUEUED  = "QUEUED"     ;
   const STATE_RUNNING = "RUNNING"    ;
   const STATE_DONE    = "DONE"       ;
   const STATE_ERROR   = "ERROR"      ;
 
-  private int $id = 0;
+  private int $_id = 0;
 
   /**
     *   @param
@@ -47,16 +44,16 @@ class Process {
     }
 
     if ( is_int($arg) ) {
-      $this->id = $arg;
+      $this->_id = $arg;
       if( ! file_exists($this->storage()) ) {
         $this-panic("storage not found: {$this->storage()}");
       }
     }
 
     if ( is_string($arg) ) {
-      $this->id = 1;
+      $this->_id = 1;
       while( file_exists($this->storage()) ) {
-        $this->id++;
+        $this->_id++;
       }
       if ( ! mkdir($this->storage()) ) {
         $this-panic("can't init storage {$this->storage()}");
@@ -72,10 +69,10 @@ class Process {
   }
 
   /**
-   *   @return string "/absolute/path/to/proc/$id"
+   *   @return string "/absolute/path/to/proc/$_id"
    */
   private function storage() {
-    return self::PROC . self::DS . sprintf("%'.08d",$this->_id);
+    return Env::baseDir() . self::DS . sprintf("%'.08d",$this->_id);
   }
 
   /**
@@ -94,6 +91,7 @@ class Process {
     return strlen($value) == 0 ? null : (int) $value;
   }
 
+  public function id()       { return $this->_id;                           }
   public function command()  { return $this->get("command");                }
   public function label()    { return $this->get("label");                  }
   public function signal()   { return $this->get("signal");                 }
@@ -171,7 +169,7 @@ class Process {
    *           false    on error
    *
    *   execute $command in the background with nohup
-   *   stdin and stdout are redirected to corresponding files in proc/id
+   *   stdin and stdout are redirected to corresponding files in proc/_id
    */
   public function start() {
 
