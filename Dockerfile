@@ -12,6 +12,7 @@ RUN apk add --no-cache \
   php8-iconv \
   php8-json \
   php8-mbstring \
+  php8-openssl \
   php8-session
 
 RUN mkdir -p /run/nginx
