@@ -1,54 +1,19 @@
 <?php
 
-/**
- *   Glogal configuration
- */
-class Config {
 
-  const DS            = DIRECTORY_SEPARATOR;
+define( 'DS'            , DIRECTORY_SEPARATOR          );
+define( 'DIR_ROOT'      ,  __DIR__                     );
+define( 'DIR_WEBROOT'   ,  DIR_ROOT . DS . "webroot"   );
+define( 'DIR_PHP'       ,  DIR_ROOT . DS . "php"       );
+define( 'DIR_BIN'       ,  DIR_ROOT . DS . "bin"       );
+define( 'DIR_PROC'      ,  DIR_ROOT . DS . "proc"      );
+define( 'DIR_DOWNLOAD'  ,  DIR_ROOT . DS . "playlist"  );
+define( 'DIR_PLAYLIST'  ,  "playlist"                  );
+define( 'DIR_IMG'       ,  "pics"                      );
+define( 'DIR_JS'        ,  "js"                        );
+define( 'DIR_CSS'       ,  "css"                       );
+define( 'HTML_CHARSET'  ,  "utf8"                      );
 
-  const MAINTENANCE   = false;
-
-  const VERSION       = "0.02";
-
-  const ROOT          = __DIR__;
-  const WEBROOT       = self::ROOT.self::DS."webroot";
-
-  /* relative to ROOT */
-  const PHP           = "php";
-  const BIN           = "bin";
-  const PROC          = "proc";
-  const DOWNLOAD      = "playlist";
-
-  /* relative to WEBROOT */
-  const PLAYLIST      = "playlist";
-  const IMG           = "pics";
-  const JS            = "js";
-  const CSS           = "css";
-
-  const HTML_CHARSET  = "utf8";
-
-  static function autoload($class) {
-    $file = self::ROOT.self::DS.self::PHP;
-    foreach(explode("\\",$class) as $name) {
-      if(!empty($name)) $file.=self::DS.$name;
-    }
-    $file.=".php";
-    if (file_exists($file)) {
-      require_once($file);
-    } else {
-      error_log("[".__FILE__."::".__FUNCTION__."] $class not found: $file");
-    }
-
-  }
-
-}
-
-spl_autoload_register("Config::autoload");
-
-if(Config::MAINTENANCE) {
-  header("HTTP/1.1 503");
-  die("<h1>503 Service unavailable</h1>");
-}
+require_once("autoloader.php");
 
 ?>
