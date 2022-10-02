@@ -1,27 +1,25 @@
 <?php
 
-    include("../config.php");
+  include("../config.php");
 
-//die("<h1>Disabled by admin</h1>");
-
-    $url = rawurldecode(@$_GET['url']);
-
-    $bandcamp = new Bandcamp($url);
-
+  $url = rawurldecode(@$_GET['url']);
+  if( $url ) {
+    $bandcamp = new NoLibForIt\Bandcamp\Bandcamp($url);
     if( isset($_GET['download']) ) $bandcamp->download();
+  }
 
 ?>
 <!DOCTYPE html>
 <html>
 <head>
 <title>Bandcamp downloader</title>
-<meta http-equiv="Content-Type" content="text/html;charset=<?php echo Config::HTML_CHARSET; ?>" />
-<meta charset="<?php echo Config::HTML_CHARSET; ?>" />
+<meta http-equiv="Content-Type" content="text/html;charset=<?php echo HTML_CHARSET; ?>" />
+<meta charset="<?php echo HTML_CHARSET; ?>" />
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <meta name="theme-color" content="#222">
-<link href="<?php echo Config::CSS; ?>/bandcamp.css" rel="stylesheet" type="text/css" />
+<link href="<?php echo DIR_CSS; ?>/bandcamp.css" rel="stylesheet" type="text/css" />
 </head>
-<script src="<?php echo Config::JS; ?>/xhr.js"></script>
+<script src="<?php echo DIR_JS; ?>/xhr.js"></script>
 <script>
 function playMe( e ) {
     var tracks = document.getElementById("tracks");
@@ -82,22 +80,22 @@ function gencovers()    { jget("jtop.php?gencovers",buildTop); }
             <button type="submit" name="download">Download</button>
         </form>
 
-        <div id="bandcamp" <?php if( empty($bandcamp->get_album()) ) { echo 'style="display:none"'; } ?>>
-            <a id="url" href="<?php echo @$bandcamp->get_url(); ?>"><?php echo @$bandcamp->get_url(); ?></a>
-            <span id="artist"   ><?php echo @$bandcamp->get_HTML_artist();    ?></span> 
-            <span id="album"    ><?php echo @$bandcamp->get_HTML_album();     ?></span>
-            <span id="released" ><?php echo @$bandcamp->get_HTML_released();  ?></span>
-            <img  id="cover" src="<?php echo @$bandcamp->get_cover_src(); ?>">
+        <div id="bandcamp" <?php if( empty($bandcamp->album) ) { echo 'style="display:none"'; } ?>>
+            <a id="url" href="<?php echo @$bandcamp->url; ?>"><?php echo @$bandcamp->url; ?></a>
+            <span id="artist"    ><?php echo @$bandcamp->htmlArtist();    ?></span> 
+            <span id="album"     ><?php echo @$bandcamp->htmlAlbum();     ?></span>
+            <span id="released"  ><?php echo @$bandcamp->htmlReleased();  ?></span>
+            <img  id="cover" src="<?php echo @$bandcamp->cover; ?>">
             <audio id="player" onended="playNext()" controls type="audio/mpeg" src=""></audio>
-               
+ 
             <div id="tracks">
-            <?php foreach( @$bandcamp->get_tracks() as $track ): ?>
+            <?php foreach( @$bandcamp->tracks as $track ): ?>
                 <span
-                    data-src="<?php echo $track->get_mp3url();?>"
-                    data-index="<?php echo $track->get_num();?>"
+                    data-src="<?php echo $track->mp3url;?>"
+                    data-index="<?php echo $track->num;?>"
                     onclick="playMe(this)"
                 >
-                    <?php echo $track->get_HTML_title(); ?>
+                    <?php echo $track->htmlTitle(); ?>
                 </span>
             <?php endforeach; ?>
             </div>

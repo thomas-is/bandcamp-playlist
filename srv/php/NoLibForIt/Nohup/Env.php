@@ -4,7 +4,7 @@ namespace NoLibForIt\Nohup;
 
 class Env {
 
-  const KEY_BASE_DIR = "NOLIBFORIT_NOHUP_DIR";
+  const KEY_BASE_DIR = "DIR_PROC";
 
   private static function get( string $key ) {
     if( defined($key) ) { return constant($key); }

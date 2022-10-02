@@ -1,6 +1,6 @@
 <?php
 
-namespace \NoLibForIt\Bandcamp
+namespace NoLibForIt\Bandcamp;
 
 class Track {
 
@@ -21,9 +21,9 @@ class Track {
     /**
     *   HTML getters
     */
-    public function displayNum()      { return sprintf("%02d",$this->num); }
-    public function displayTitle()    { return htmlspecialchars($this->title); }
-    public function displayDuration() { return date("i:s",$this->duration); }
+    public function htmlNum()      { return sprintf("%02d",$this->num); }
+    public function htmlTitle()    { return htmlspecialchars($this->title); }
+    public function htmlDuration() { return date("i:s",$this->duration); }
     /**
     *   FS getters
     */

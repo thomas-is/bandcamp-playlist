@@ -8,13 +8,13 @@ class Bandcamp {
 
   private $html;
 
-  private $artist    ;
-  private $album     ;
-  private $cover_src ;
-  private $released  ;
-  private $url       ;
+  public $artist    ;
+  public $album     ;
+  public $cover     ;
+  public $released  ;
+  public $url       ;
 
-  private $tracks    ;
+  public $tracks    ;
 
   public const DELIMITER = "_";
 
@@ -41,18 +41,18 @@ class Bandcamp {
    */
   private function decode( $key ) {
     return (array) json_decode(
-        html_entity_decode($this->getRawDataValue($key))
-        ,true
-        );
+      html_entity_decode($this->valueOf($key))
+      ,true
+    );
   }
 
 
-  public function __construct( $url, $maxlen = 400000 ){
+  public function __construct( $url ){
 
-    $this->html = @file_get_contents( $url, NULL, NULL, NULL, $maxlen );
+    $this->html = file_get_contents( $url );
 
     if ( empty($this->html) ) {
-      throw new \Exception("no contents!");
+      throw new \Exception("no contents at $url");
     }
 
     $tralbum         = $this->decode("data-tralbum");
@@ -75,7 +75,7 @@ class Bandcamp {
   public function htmlAlbum()    { return htmlspecialchars($this->album);    }
   public function htmlReleased() {
     return $this->released
-      ? date("Y-m-d",strtotime($this->release_date))
+      ? date("Y-m-d",strtotime($this->released))
       : "??-??-??";
   }
   /*
@@ -107,12 +107,12 @@ class Bandcamp {
   public function download(){
     $d = new DownloadAs($this->cover,$this->fileCover());
     file_put_contents(
-      self::NFO
+        self::NFO
         . $this->filePrefix()
         . DIRECTORY_SEPARATOR
         . "nfo.json"
-      , $this->nfo()
-    );
+        , $this->nfo()
+        );
     foreach($this->tracks as $track) {
       $url = $track->get_mp3url();
       $file = $this->get_FS_prefix().$track->get_FS_suffix();
@@ -120,29 +120,29 @@ class Bandcamp {
     }
   }
 
-    /*
-    *   NFO json export
-    */
-    public function nfo() {
-        $js = array();
-        $js['url']          = $this->url;
-        $js['artist']       = $this->artist;
-        $js['released']     = $this->released;
-        $js['album']        = $this->album;
-        $js['cover']        = $this->filePrefix().DIRECTORY_SEPARATOR."cover.jpg";
-        $js['tracks']       = array();
-        foreach( $this->tracks as $track ) {
-            $jstrack = array();
-            $jstrack['num'     ] = $track->num;
-            $jstrack['title'   ] = $track->title;
-            $jstrack['duration'] = $track->duration;
-            if( !empty($track->mp3url()) ) {
-                $jstrack['mp3' ] = $this->filePrefix() . $track->fileSuffix();
-            }
-            $js['tracks'][] = $jstrack;
-        }
-        return json_encode($js);
+  /*
+   *   NFO json export
+   */
+  public function nfo() {
+    $js = array();
+    $js['url']          = $this->url;
+    $js['artist']       = $this->artist;
+    $js['released']     = $this->released;
+    $js['album']        = $this->album;
+    $js['cover']        = $this->filePrefix().DIRECTORY_SEPARATOR."cover.jpg";
+    $js['tracks']       = array();
+    foreach( $this->tracks as $track ) {
+      $jstrack = array();
+      $jstrack['num'     ] = $track->num;
+      $jstrack['title'   ] = $track->title;
+      $jstrack['duration'] = $track->duration;
+      if( !empty($track->mp3url()) ) {
+        $jstrack['mp3' ] = $this->filePrefix() . $track->fileSuffix();
+      }
+      $js['tracks'][] = $jstrack;
     }
+    return json_encode($js);
+  }
 
 
 
