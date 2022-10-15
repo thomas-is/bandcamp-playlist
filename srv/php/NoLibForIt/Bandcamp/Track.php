@@ -4,7 +4,6 @@ namespace NoLibForIt\Bandcamp;
 
 class Track {
 
-    const DELIMITER = Bandcamp::DELIMITER;
 
     public $num;
     public $title;
@@ -21,16 +20,20 @@ class Track {
     /**
     *   HTML getters
     */
-    public function htmlNum()      { return sprintf("%02d",$this->num); }
+    public function htmlNum()      { return sprintf("%02d", $this->num); }
     public function htmlTitle()    { return htmlspecialchars($this->title); }
-    public function htmlDuration() { return date("i:s",$this->duration); }
+    public function htmlDuration() { return date("i:s", $this->duration); }
     /**
     *   FS getters
     */
-    public function fileNum()        { return $this->displayNum(); }
-    public function fileTitle()      { return self::safeString($this->title); }
+    public function fileNum()    { return $this->displayNum(); }
+    public function fileTitle()  { return Bandcamp::safeString($this->title); }
     public function fileSuffix() {
-        return DIRECTORY_SEPARATOR.$this->fileNum().self::DELIMITER.$this->fileTitle().".mp3";
+        return DIRECTORY_SEPARATOR
+             . $this->fileNum()
+             . Bandcamp::DELIMITER;
+             . $this->fileTitle()
+             . ".mp3";
     }
 
 
