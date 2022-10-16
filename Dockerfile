@@ -5,6 +5,7 @@ ENV LOG_FORMAT    main
 
 RUN apk add --no-cache \
   ca-certificates \
+  imagemagick \
   nginx \
   php8 \
   php8-curl \
