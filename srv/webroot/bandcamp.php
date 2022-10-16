@@ -17,9 +17,9 @@
 <meta charset="<?php echo HTML_CHARSET; ?>" />
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <meta name="theme-color" content="#222">
-<link href="<?php echo DIR_CSS; ?>/bandcamp.css" rel="stylesheet" type="text/css" />
+<link href="<?php echo SRC_CSS; ?>/bandcamp.css" rel="stylesheet" type="text/css" />
 </head>
-<script src="<?php echo DIR_JS; ?>/xhr.js"></script>
+<script src="<?php echo SRC_JS; ?>/xhr.js"></script>
 <script>
 function playMe( e ) {
     var tracks = document.getElementById("tracks");
