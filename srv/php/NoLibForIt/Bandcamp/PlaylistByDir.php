@@ -51,6 +51,7 @@ class PlaylistByDir {
                 . $mp3
             ];
           }
+          @file_put_contents($json,json_encode($nfo,JSON_PRETTY_PRINT));
         }
         $this->nfo[] = $nfo;
       }
