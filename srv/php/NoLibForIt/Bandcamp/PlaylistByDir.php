@@ -8,7 +8,8 @@ class PlaylistByDir {
   private $nfo;
 
   public static function getPath( string $artist, string $album ) {
-    return SRC_PLAYLIST
+    return DIR_DOWNLOAD
+      . DIRECTORY_SEPARATOR
       . $artist
       . DIRECTORY_SEPARATOR
       . $album
@@ -24,7 +25,7 @@ class PlaylistByDir {
       $albums[$artist] = $this->listdir($artist);
     }
 
-    $this->nfo = array();
+    $this->nfo = [];
     foreach( $artists as $artist ){
       foreach( $albums[$artist] as $album) {
         $json = self::getPath( $artist, $album ) . "nfo.json";
@@ -35,21 +36,22 @@ class PlaylistByDir {
           $nfo['album']    = $album;
           $nfo['released'] = "????";
           $nfo['tracks']   = [];
-          $nfo['path']     = self::getPath($artist,$album);
+          $nfo['path']     = SRC_PLAYLIST."/$artist/$album/";
           foreach($this->listmp3($artist,$album) as $mp3) {
             $nfo['tracks'][] = [
               'num'   => substr($mp3,0,2),
-              'title' => substr($mp3,5,-4),
+              'title' => substr($mp3,3,-4),
               'mp3'   =>
-                $artist
-                . DIRECTORY_SPERARATOR
+                  SRC_PLAYLIST
+                . DIRECTORY_SEPARATOR
+                . $artist
+                . DIRECTORY_SEPARATOR
                 . $album
                 . DIRECTORY_SEPARATOR
                 . $mp3
             ];
           }
         }
-        $nfo['path'] = self::getPath($artist,$album);
         $this->nfo[] = $nfo;
       }
     }
@@ -72,10 +74,10 @@ class PlaylistByDir {
 
   private function listdir( string $dir = "" ){
     $stack = [];
-    foreach( scandir(SRC_PLAYLIST.$dir) as $entry ) {
+    foreach( scandir(DIR_DOWNLOAD.DIRECTORY_SEPARATOR.$dir) as $entry ) {
       if ( strpos($entry,".") === 0
           || strpos($entry,Bandcamp::DELIMITER) === 0
-          || ! is_dir($dir.DIRECTORY_SEPARATOR.$entry)
+          || ! is_dir(DIR_DOWNLOAD.DIRECTORY_SEPARATOR.$dir.DIRECTORY_SEPARATOR.$entry)
          ) {
         continue;
       }

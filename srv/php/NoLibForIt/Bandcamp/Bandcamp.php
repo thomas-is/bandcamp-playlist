@@ -17,6 +17,12 @@ class Bandcamp {
   public $tracks    ;
 
   public const DELIMITER = "_";
+  public const NFO =
+    DIR_ROOT
+    . DIRECTORY_SEPARATOR
+    . DIR_DOWNLOAD
+    . DIRECTORY_SEPARATOR;
+
 
   public static function safeString( string $s) {
     return preg_replace("/[^a-zA-Z0-9]/","_",$s);
@@ -108,14 +114,12 @@ class Bandcamp {
     $d = new DownloadAs($this->cover,$this->fileCover());
     file_put_contents(
         self::NFO
-        . $this->filePrefix()
-        . DIRECTORY_SEPARATOR
         . "nfo.json"
         , $this->nfo()
         );
     foreach($this->tracks as $track) {
-      $url = $track->get_mp3url();
-      $file = $this->get_FS_prefix().$track->get_FS_suffix();
+      $url = $track->mp3url;
+      $file = $this->filePrefix().$track->fileSuffix();
       $d = new DownloadAs($url,$file);
     }
   }
@@ -136,7 +140,7 @@ class Bandcamp {
       $jstrack['num'     ] = $track->num;
       $jstrack['title'   ] = $track->title;
       $jstrack['duration'] = $track->duration;
-      if( !empty($track->mp3url()) ) {
+      if( !empty($track->mp3url) ) {
         $jstrack['mp3' ] = $this->filePrefix() . $track->fileSuffix();
       }
       $js['tracks'][] = $jstrack;

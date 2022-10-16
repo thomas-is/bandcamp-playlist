@@ -26,7 +26,7 @@ class Track {
     /**
     *   FS getters
     */
-    public function fileNum()    { return $this->displayNum(); }
+    public function fileNum()    { return $this->htmlNum(); }
     public function fileTitle()  { return Bandcamp::safeString($this->title); }
     public function fileSuffix() {
         return DIRECTORY_SEPARATOR

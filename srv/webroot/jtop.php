@@ -13,7 +13,7 @@ if ( isset($_GET['clean']) ) {
 
 if( isset($_GET['gencovers']) ) {
     $p = new NoLibForIt\Nohup\Process(
-      "bash ".BIN.DS."gencovers.bash download",
+      "sh ".DIR_BIN.DIRECTORY_SEPARATOR."gencovers.sh ".DIR_DOWNLOAD ,
       "Covers"
     );
     $p->start();

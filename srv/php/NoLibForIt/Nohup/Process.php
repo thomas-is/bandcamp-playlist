@@ -131,6 +131,9 @@ class Process {
       (string) $value
     );
   }
+  public function setLabel( string $value) {
+    $this->set('label',$value);
+  }
 
 
   /**

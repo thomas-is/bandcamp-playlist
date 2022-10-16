@@ -56,7 +56,7 @@ function buildTop( data ) {
         t.appendChild(p);
         p.setAttribute("data-id",id);
         p.querySelector(".state").innerHTML = data[id]['state'];
-        p.querySelector(".title").innerHTML = data[id]['title'];
+        p.querySelector(".label").innerHTML = data[id]['label'];
     }
 }
 function send(e) {
@@ -87,7 +87,7 @@ function gencovers()    { jget("jtop.php?gencovers",buildTop); }
             <span id="released"  ><?php echo @$bandcamp->htmlReleased();  ?></span>
             <img  id="cover" src="<?php echo @$bandcamp->cover; ?>">
             <audio id="player" onended="playNext()" controls type="audio/mpeg" src=""></audio>
- 
+
             <div id="tracks">
             <?php foreach( @$bandcamp->tracks as $track ): ?>
                 <span
@@ -100,7 +100,7 @@ function gencovers()    { jget("jtop.php?gencovers",buildTop); }
             <?php endforeach; ?>
             </div>
         </div>
-        <a href="<?php echo $_SERVER['PHP_SELF']."?url=".@$bandcamp->get_url()."&download"; ?>"><button>Add to queue</button></a>
+        <a href="<?php echo $_SERVER['PHP_SELF']."?url=".$bandcamp->url."&download"; ?>"><button>Add to queue</button></a>
         <button onclick="gencovers()">Rebuild covers</button>
         <button onclick="clean()">Clean</button>
         <div id="top"></div>
@@ -108,7 +108,7 @@ function gencovers()    { jget("jtop.php?gencovers",buildTop); }
         <div id="components">
             <div class="process" data-id="">
                 <span class="state" onclick="send(this)"></span>
-                <span class="title"></span>
+                <span class="label"></span>
             </div>
         </div>
     </div>

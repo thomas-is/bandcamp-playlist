@@ -20,6 +20,7 @@ class Table {
   }
   /**  @return bool */
   private function action( string $action, int $id ) {
+    $this->init();
     return empty($this->job[$id]) ? false : (bool) $this->job[$id]->$action();
   }
 

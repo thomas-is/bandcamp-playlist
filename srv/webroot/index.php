@@ -58,7 +58,7 @@ $playlist = new PlaylistByDir;
     </div>
     </div>
   <?php foreach ($nfo['tracks'] as $track): ?>
-  <div onclick="playMe(this);" data-mp3="<?php if(!empty($track['mp3']) and file_exists($playlist->root().$track['mp3'])) echo $playlist->root().$track['mp3']; ?>">
+  <div onclick="playMe(this);" data-mp3="<?php if(!empty($track['mp3']) ) echo $track['mp3']; ?>">
     <span class="track"><?php echo $track['num']; ?></span>
     <span class="title"><?php echo $track['title']; ?></span>
   </div>

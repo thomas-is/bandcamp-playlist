@@ -3,6 +3,7 @@
 thumbnails() {
   cd $@
   pwd
+  ls
   if [ -f "cover.jpg" ] ; then
     for PX in 64 128 320 480
     do
