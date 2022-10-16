@@ -31,7 +31,7 @@ class Track {
     public function fileSuffix() {
         return DIRECTORY_SEPARATOR
              . $this->fileNum()
-             . Bandcamp::DELIMITER;
+             . Bandcamp::DELIMITER
              . $this->fileTitle()
              . ".mp3";
     }
