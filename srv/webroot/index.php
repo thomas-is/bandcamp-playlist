@@ -1,21 +1,20 @@
 <?php
-
+use NoLibForIt\Bandcamp\PlaylistByDir;
 include("../config.php");
 $playlist = new PlaylistByDir;
-
 ?>
 <!DOCTYPE html>
 <html>
 <head>
 <title>Playlist</title>
-<meta http-equiv="Content-Type" content="text/html;charset=<?php echo Config::HTML_CHARSET; ?>" />
-<meta charset="<?php echo Config::HTML_CHARSET; ?>" />
+<meta http-equiv="Content-Type" content="text/html;charset=<?php echo HTML_CHARSET; ?>" />
+<meta charset="<?php echo HTML_CHARSET; ?>" />
 <link rel="icon" type="image/png" href="pics/zero.png">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <meta name="theme-color" content="#222">
-<link href="<?php echo Config::CSS; ?>/playlist.css" rel="stylesheet" type="text/css" />
+<link href="<?php echo SRC_CSS; ?>/playlist.css" rel="stylesheet" type="text/css" />
 </head>
-<script src="<?php echo Config::JS; ?>/playlist.js"></script>
+<script src="<?php echo SRC_JS; ?>/playlist.js"></script>
 <body >
 
 <div id="page">
