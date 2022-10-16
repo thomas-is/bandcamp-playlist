@@ -151,7 +151,7 @@ pre {
     padding-left: 8px;
 }
 .state {
-    flex: 1 1;
+    flex: 0 0 100px;
     cursor: pointer;
 }
 .title {
