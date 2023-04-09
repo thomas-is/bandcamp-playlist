@@ -3,8 +3,13 @@
 include("../config.php");
 
 $top = new NoLibForIt\Nohup\Table;
+
 if ( isset($_GET['start']) ) {
   $top->start((int)$_GET['start']);
+}
+
+if ( isset($_GET['startAll']) ) {
+  $top->startAll();
 }
 
 if ( isset($_GET['clean']) ) {

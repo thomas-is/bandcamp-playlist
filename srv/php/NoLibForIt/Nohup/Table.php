@@ -55,11 +55,20 @@ class Table {
     return $top;
   }
 
-  /** @return void */
   public function clean() {
     $this->init();
     foreach( $this->job as $job ) {
       $job->clean();
+    }
+  }
+
+  public function startAll() {
+    $this->init();
+    foreach( $this->job as $job ) {
+      if ( $job->state() != "QUEUED" ) {
+        continue;
+      }
+      $job->start();
     }
   }
 

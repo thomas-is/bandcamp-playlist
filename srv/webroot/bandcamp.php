@@ -63,6 +63,7 @@ function send(e) {
     var id = e.parentElement.getAttribute("data-id");
     jget("jtop.php?start="+id,buildTop);
 }
+function startAll()     { jget("jtop.php?startAll",buildTop); }
 function clean()        { jget("jtop.php?clean",buildTop); }
 function gencovers()    { jget("jtop.php?gencovers",buildTop); }
 
@@ -77,7 +78,7 @@ function gencovers()    { jget("jtop.php?gencovers",buildTop); }
         <form action="<?php echo $_SERVER['PHP_SELF'];?>">
             <input type="text" name="url" placeholder="Enter bandcamp url" value="">
             <button type="submit">Preview</button>
-            <button type="submit" name="download">Download</button>
+            <!-- <button type="submit" name="download">Download</button> -->
         </form>
 
         <div id="bandcamp" <?php if( empty($bandcamp->album) ) { echo 'style="display:none"'; } ?>>
@@ -100,10 +101,18 @@ function gencovers()    { jget("jtop.php?gencovers",buildTop); }
             <?php endforeach; ?>
             </div>
         </div>
-        <a href="<?php echo $_SERVER['PHP_SELF']."?url=".$bandcamp->url."&download"; ?>"><button>Add to queue</button></a>
-        <button onclick="gencovers()">Rebuild covers</button>
-        <button onclick="clean()">Clean</button>
+
+        <div>
+          <a href="<?php echo $_SERVER['PHP_SELF']."?url=".$bandcamp->url."&download"; ?>"><button>Add to queue</button></a>
+          <button onclick="gencovers()">Rebuild covers</button>
+        </div>
+        <div>
+          <button onclick="clean()">Clean</button>
+          <button onclick="startAll()">Start all</button>
+        </div>
+
         <div id="top"></div>
+
 
         <div id="components">
             <div class="process" data-id="">
