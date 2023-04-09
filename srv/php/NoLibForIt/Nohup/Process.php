@@ -119,8 +119,6 @@ class Process {
     return ! empty($this->pid());
   }
 
-
-
   /**
     *   @param  string $property, string|int $value
     *   @return int number of chars written
@@ -171,6 +169,7 @@ class Process {
     foreach( glob($this->storage().self::DS."*") as $file ) {
       unlink($file);
     }
+
     rmdir($this->storage());
 
   }
