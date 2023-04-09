@@ -232,7 +232,11 @@ body {
     flex: 0 0 32px;
     text-align: center;
 }
-[data-mp3] > .title { flex: 1 1; }
+
+[data-mp3] > .title {
+  flex: 1 1;
+  margin-left: 4px;
+}
 
 
 [data-album] > [data-mp3]:nth-child(even) {
