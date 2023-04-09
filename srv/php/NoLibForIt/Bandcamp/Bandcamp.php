@@ -17,11 +17,6 @@ class Bandcamp {
   public $tracks    ;
 
   public const DELIMITER = "-";
-  public const NFO =
-    DIR_ROOT
-    . DIRECTORY_SEPARATOR
-    . DIR_DOWNLOAD
-    . DIRECTORY_SEPARATOR;
 
 
   public static function safeString( string $s) {
@@ -74,8 +69,6 @@ class Bandcamp {
       $this->tracks[] = new Track($trackinfo);
     }
 
-//    header("Content-Type: application/json");
-//    die(json_encode($this->fileCover()));
   }
 
   public function htmlArtist()   { return htmlspecialchars($this->artist);   }
@@ -102,8 +95,6 @@ class Bandcamp {
   public function filePrefix() {
     return $this->fileArtist()
       . DIRECTORY_SEPARATOR
-      . $this->fileReleased()
-      . Bandcamp::DELIMITER
       . $this->fileAlbum();
   }
   public function fileCover() {
@@ -111,13 +102,16 @@ class Bandcamp {
       . DIRECTORY_SEPARATOR
       . "cover.jpg";
   }
+  public function fileNFO() {
+    return DIR_DOWNLOAD
+      . DIRECTORY_SEPARATOR
+      . $this->filePrefix()
+      . DIRECTORY_SEPARATOR
+      . "nfo.json";
+  }
   public function download(){
     $d = new DownloadAs($this->cover,$this->fileCover());
-    file_put_contents(
-        self::NFO
-        . "nfo.json"
-        , $this->nfo()
-        );
+    file_put_contents($this->fileNFO(), $this->nfo());
     foreach($this->tracks as $track) {
       $url = $track->mp3url;
       $file = $this->filePrefix().$track->fileSuffix();
@@ -129,12 +123,15 @@ class Bandcamp {
    *   NFO json export
    */
   public function nfo() {
+    $src =  DIRECTORY_SEPARATOR . SRC_PLAYLIST . DIRECTORY_SEPARATOR;
     $js = array();
     $js['url']          = $this->url;
     $js['artist']       = $this->artist;
     $js['released']     = $this->released;
     $js['album']        = $this->album;
-    $js['cover']        = $this->filePrefix().DIRECTORY_SEPARATOR."cover.jpg";
+    $js['cover']        = $src . $this->filePrefix() . DIRECTORY_SEPARATOR . "cover.jpg";
+    $js['cover-small']  = $src . $this->filePrefix() . DIRECTORY_SEPARATOR . "cover-128px.jpg";
+    $js['cover-large']  = $src . $this->filePrefix() . DIRECTORY_SEPARATOR . "cover-320px.jpg";
     $js['tracks']       = array();
     foreach( $this->tracks as $track ) {
       $jstrack = array();
@@ -142,7 +139,7 @@ class Bandcamp {
       $jstrack['title'   ] = $track->title;
       $jstrack['duration'] = $track->duration;
       if( !empty($track->mp3url) ) {
-        $jstrack['mp3' ] = $this->filePrefix() . $track->fileSuffix();
+        $jstrack['mp3' ] = $src . $this->filePrefix() . $track->fileSuffix();
       }
       $js['tracks'][] = $jstrack;
     }

@@ -5,7 +5,7 @@ namespace NoLibForIt\Bandcamp;
 
 class PlaylistByDir {
 
-  private $nfo;
+  public $nfo;
 
   public static function getPath( string $artist, string $album ) {
     return DIR_DOWNLOAD
@@ -30,13 +30,13 @@ class PlaylistByDir {
       foreach( $albums[$artist] as $album) {
         $json = self::getPath( $artist, $album ) . "nfo.json";
         $nfo = json_decode(@file_get_contents($json),true);
+//        $nfo['src'] = SRC_PLAYLIST."/$artist/$album/";
         if( empty($nfo) ) {
           $nfo = [];
           $nfo['artist']   = $artist;
           $nfo['album']    = $album;
           $nfo['released'] = "????";
           $nfo['tracks']   = [];
-          $nfo['path']     = SRC_PLAYLIST."/$artist/$album/";
           foreach($this->listmp3($artist,$album) as $mp3) {
             $nfo['tracks'][] = [
               'num'   => substr($mp3,0,2),
