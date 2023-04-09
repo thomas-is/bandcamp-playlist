@@ -16,7 +16,7 @@ class Bandcamp {
 
   public $tracks    ;
 
-  public const DELIMITER = "_";
+  public const DELIMITER = "-";
   public const NFO =
     DIR_ROOT
     . DIRECTORY_SEPARATOR
@@ -63,18 +63,19 @@ class Bandcamp {
 
     $tralbum         = $this->decode("data-tralbum");
 
-    $this->artist    = @$tralbum['artist'];
-    $this->album     = @$tralbum['packages'][0]['album_title'];
+    $this->artist    = (string) @$tralbum['artist'];
+    $this->album     = @$tralbum['current']['title'];
     $this->cover     = $this->valueOf('<meta property="og:image" content');
-    $this->released  = @$tralbum['album_release_date'];
-    $this->url       = @$tralbum['url'];
+    $this->released  = (string) @$tralbum['album_release_date'];
+    $this->url       = (string) @$tralbum['url'];
 
     $this->tracks = [];
     foreach ( (array) @$tralbum['trackinfo'] as $trackinfo ) {
       $this->tracks[] = new Track($trackinfo);
     }
 
-
+//    header("Content-Type: application/json");
+//    die(json_encode($this->fileCover()));
   }
 
   public function htmlArtist()   { return htmlspecialchars($this->artist);   }
