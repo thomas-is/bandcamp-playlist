@@ -51,24 +51,24 @@ $playlist = new PlaylistByDir;
   </div>
 
   <div class="flexplaylist">
-  <?php foreach( (array) $playlist->get_nfo() as $nfo ): ?>
+    <?php foreach( (array) $playlist->get_nfo() as $nfo ): ?>
     <div data-artist="<?php echo $nfo['artist']; ?>" data-album="<?php echo $nfo['album']; ?>" data-cover="<?php echo $nfo['cover-large']; ?>">
-    <div class="albumhead">
-      <img class="smallcover" src="<?php echo $nfo['cover-small']; ?>">
-      <div class="nfo">
-      <span class="artist"><?php echo $nfo['artist']; ?></span>
-      <span class="album"><?php echo $nfo['album']; ?></span>
-      <span class="released"><?php echo substr($nfo['released'],0,4); ?></span>
-    </div>
-    </div>
-  <?php foreach ($nfo['tracks'] as $track): ?>
-  <div onclick="playMe(this);" data-mp3="<?php if(!empty($track['mp3']) ) echo $track['mp3']; ?>">
+      <div class="albumhead">
+        <img class="smallcover" src="<?php echo $nfo['cover-small']; ?>">
+        <div class="nfo">
+          <span class="artist"><?php   echo $nfo['artist'];                        ?></span>
+          <span class="album"><?php    echo $nfo['album'];                         ?></span>
+          <span class="released"><?php echo date("Y",strtotime($nfo['released'])); ?></span>
+        </div>
+      </div>
+      <?php foreach ($nfo['tracks'] as $track): ?>
+      <div onclick="playMe(this);" data-mp3="<?php if(!empty($track['mp3']) ) echo $track['mp3']; ?>">
     <!-- <span class="track"><?php echo $track['num']; ?></span> -->
-    <span class="title"><?php echo $track['title']; ?></span>
-  </div>
-  <?php endforeach; ?>
-  </div>
-  <?php endforeach; ?>
+        <span class="title"><?php echo $track['title']; ?></span>
+      </div>
+      <?php endforeach; ?>
+    </div>
+    <?php endforeach; ?>
   </div>
 
 </div>
