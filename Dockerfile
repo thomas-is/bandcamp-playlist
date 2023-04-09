@@ -7,14 +7,14 @@ RUN apk add --no-cache \
   ca-certificates \
   imagemagick \
   nginx \
-  php8 \
-  php8-curl \
-  php8-fpm \
-  php8-iconv \
-  php8-json \
-  php8-mbstring \
-  php8-openssl \
-  php8-session
+  php81 \
+  php81-curl \
+  php81-fpm \
+  php81-iconv \
+  php81-json \
+  php81-mbstring \
+  php81-openssl \
+  php81-session
 
 RUN mkdir -p /run/nginx
 
