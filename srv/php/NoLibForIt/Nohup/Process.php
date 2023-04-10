@@ -143,7 +143,7 @@ class Process {
 
     /* has a valid exit code ? */
     if( is_int($this->exitcode()) ) {
-      return $this->exitcode() == 0  ? "DONE" : "ERROR";
+      return $this->exitcode() == 0  ? self::STATE_DONE : self::STATE_ERROR;
     }
 
     /* has a valid signal ? */
@@ -153,10 +153,10 @@ class Process {
 
     /* has a valid pid ? */
     if( is_int($this->pid()) ) {
-      return "RUNNING";
+      return self::STATE_RUNNING;
     }
 
-    return "QUEUED";
+    return self::STATE_QUEUED;
 
   }
 
