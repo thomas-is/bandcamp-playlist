@@ -65,7 +65,7 @@ class Table {
   public function startAll() {
     $this->init();
     foreach( $this->job as $job ) {
-      if ( $job->state() != "QUEUED" ) {
+      if ( $job->state() != Process::STATE_QUEUED ) {
         continue;
       }
       $job->start();
