@@ -69,7 +69,7 @@ function gencovers()    { jget("jtop.php?gencovers",buildTop); }
 
 </script>
 
-<body onload="window.setInterval(updateTop,2000)">
+<body onload="window.setInterval(updateTop,500)">
 
     <div id="page">
 
