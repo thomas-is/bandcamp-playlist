@@ -123,18 +123,17 @@ class Bandcamp {
    *   NFO json export
    */
   public function nfo() {
-    $src =  DIRECTORY_SEPARATOR . SRC_PLAYLIST . DIRECTORY_SEPARATOR;
-    $js = array();
+    $js = [];
     $js['url']          = $this->url;
     $js['artist']       = $this->artist;
     $js['released']     = $this->released;
     $js['album']        = $this->album;
-    $js['cover']        = $src . $this->filePrefix() . DIRECTORY_SEPARATOR . "cover.jpg";
-    $js['cover-small']  = $src . $this->filePrefix() . DIRECTORY_SEPARATOR . "cover-128px.jpg";
-    $js['cover-large']  = $src . $this->filePrefix() . DIRECTORY_SEPARATOR . "cover-320px.jpg";
-    $js['tracks']       = array();
+    $js['cover']        = $this->filePrefix() . DIRECTORY_SEPARATOR . "cover.jpg";
+    $js['cover-small']  = $this->filePrefix() . DIRECTORY_SEPARATOR . "cover-128px.jpg";
+    $js['cover-large']  = $this->filePrefix() . DIRECTORY_SEPARATOR . "cover-320px.jpg";
+    $js['tracks']       = [];
     foreach( $this->tracks as $track ) {
-      $jstrack = array();
+      $jstrack = [];
       $jstrack['num'     ] = $track->num;
       $jstrack['title'   ] = $track->title;
       $jstrack['duration'] = $track->duration;

@@ -51,10 +51,10 @@ $playlist = new PlaylistByDir;
   </div>
 
   <div class="flexplaylist">
-    <?php foreach( (array) $playlist->get_nfo() as $nfo ): ?>
-    <div data-artist="<?php echo $nfo['artist']; ?>" data-album="<?php echo $nfo['album']; ?>" data-cover="<?php echo $nfo['cover-large']; ?>">
+    <?php foreach( (array) $playlist->entries as $nfo ): ?>
+    <div data-artist="<?php echo $nfo['artist']; ?>" data-album="<?php echo $nfo['album']; ?>" data-cover="<?php echo SRC_PLAYLIST."/".$nfo['cover-large']; ?>">
       <div class="albumhead">
-        <img class="smallcover" src="<?php echo $nfo['cover-small']; ?>">
+        <img class="smallcover" src="<?php echo SRC_PLAYLIST."/".$nfo['cover-small']; ?>">
         <div class="nfo">
           <span class="artist"><?php   echo $nfo['artist'];                        ?></span>
           <span class="album"><?php    echo $nfo['album'];                         ?></span>
@@ -62,7 +62,7 @@ $playlist = new PlaylistByDir;
         </div>
       </div>
       <?php foreach ($nfo['tracks'] as $track): ?>
-      <div onclick="playMe(this);" data-mp3="<?php if(!empty($track['mp3']) ) echo $track['mp3']; ?>">
+      <div onclick="playMe(this);" data-mp3="<?php if(!empty($track['mp3']) ) echo SRC_PLAYLIST."/".$track['mp3']; ?>">
     <!-- <span class="track"><?php echo $track['num']; ?></span> -->
         <span class="title"><?php echo $track['title']; ?></span>
       </div>
