@@ -5,9 +5,24 @@ namespace NoLibForIt\Bandcamp;
 
 class PlaylistByDir {
 
-  public $entries;
+  public array $albums = [];
 
-  public static function getPath( string $artist, string $album ) {
+  public function __construct(){
+
+    foreach( self::ls() as $artist ){
+      foreach( self::ls($artist) as $album) {
+        $json = self::getPath( $artist, $album ) . "nfo.json";
+        $nfo = json_decode(@file_get_contents($json),true);
+        if ( empty($nfo) ) {
+          continue;
+        }
+        $this->albums[] = $nfo;
+      }
+    }
+
+  }
+
+  private static function getPath( string $artist, string $album ) {
     return DIR_DOWNLOAD
       . DIRECTORY_SEPARATOR
       . $artist
@@ -16,48 +31,14 @@ class PlaylistByDir {
       . DIRECTORY_SEPARATOR;
   }
 
-  public function __construct(){
-
-    $artists = $this->ls();
-
-    $albums = [];
-    foreach( $artists as $artist ) {
-      $albums[$artist] = $this->ls($artist);
-    }
-
-    $this->entries = [];
-    foreach( $artists as $artist ){
-      foreach( $albums[$artist] as $album) {
-        $json = self::getPath( $artist, $album ) . "nfo.json";
-        $nfo = json_decode(@file_get_contents($json),true);
-        if ( empty($nfo) ) {
-          continue;
-        }
-        $this->entries[] = $nfo;
-      }
-    }
-  }
-
-  private function ls( string $dir = "" ) {
+  private static function ls( string $dir = "" ) {
+    $baseDir = DIR_DOWNLOAD . DIRECTORY_SEPARATOR . $dir;
     $stack = [];
-    foreach( scandir(DIR_DOWNLOAD.DIRECTORY_SEPARATOR.$dir) as $entry ) {
+    foreach( scandir($baseDir) as $entry ) {
       if (
-        strpos($entry,".") === 0
-        || strpos($entry,Bandcamp::DELIMITER) === 0
-        || ! is_dir(DIR_DOWNLOAD.DIRECTORY_SEPARATOR.$dir.DIRECTORY_SEPARATOR.$entry)
-      ) { continue; }
-      $stack[] = $entry;
-    }
-    return $stack;
-  }
-
-  private function mp3( string $artist, string $album ) {
-    $stack = [];
-    foreach( scandir(self::getPath($artist,$album)) as $entry ) {
-      if (
-        strpos($entry,".") === 0
-        || strpos($entry,"_") === 0
-        || ! strpos($entry,".mp3")
+        strpos( $entry, "." ) === 0
+        || strpos( $entry, Bandcamp::DELIMITER ) === 0
+        || ! is_dir( $baseDir . DIRECTORY_SEPARATOR . $entry )
       ) { continue; }
       $stack[] = $entry;
     }

@@ -51,7 +51,7 @@ $playlist = new PlaylistByDir;
   </div>
 
   <div class="flexplaylist">
-    <?php foreach( (array) $playlist->entries as $nfo ): ?>
+    <?php foreach( (array) $playlist->albums as $nfo ): ?>
     <div data-artist="<?php echo $nfo['artist']; ?>" data-album="<?php echo $nfo['album']; ?>" data-cover="<?php echo SRC_PLAYLIST."/".$nfo['cover-large']; ?>">
       <div class="albumhead">
         <img class="smallcover" src="<?php echo SRC_PLAYLIST."/".$nfo['cover-small']; ?>">
